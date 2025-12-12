@@ -35,14 +35,14 @@ class Matrix {
     using matrix = T[row][col];
     matrix data = {};
     public:
-    Matrix(){}
-    Matrix(const matrix &data){
+    constexpr Matrix(){}
+    constexpr Matrix(const matrix &data){
         for(size_t i=0; i<row; ++i) for(size_t j=0; j<col; ++j)
         this->data[i][j] = data[i][j];
     }
-    T* operator[](const size_t i) { return data[i]; }
-    const T* operator[](const size_t i) const { return data[i]; }
-    void print(){
+    constexpr T* operator[](const size_t i) { return data[i]; }
+    constexpr const T* operator[](const size_t i) const { return data[i]; }
+    void print() const {
         for(size_t i=0; i<row; ++i){
             for(size_t j=0; j<col; ++j){
                 std::cout << (*this)[i][j];
@@ -53,13 +53,13 @@ class Matrix {
     }
 
     template <int r = row, int c = col, std::enable_if_t<(r == 1) && (c == 1), bool> = true>
-    operator T() {
+    constexpr operator T() {
         return (*this)[0][0];
     }
 };
 
 template <typename T, size_t row, size_t col>
-Matrix<T, row, col> operator+(const Matrix<T, row, col> &A, const Matrix<T, row, col> &B){
+constexpr Matrix<T, row, col> operator+(const Matrix<T, row, col> &A, const Matrix<T, row, col> &B){
     Matrix<T, row, col> C;
     for(size_t i=0; i<row; ++i)
     for(size_t j=0; j<col; ++j)
@@ -70,7 +70,7 @@ Matrix<T, row, col> operator+(const Matrix<T, row, col> &A, const Matrix<T, row,
 }
 
 template <typename T, size_t rowA, size_t colB, size_t n>
-Matrix<T, rowA, colB> operator*(const Matrix<T, rowA, n> &A, const Matrix<T, n, colB> &B){
+constexpr Matrix<T, rowA, colB> operator*(const Matrix<T, rowA, n> &A, const Matrix<T, n, colB> &B){
     Matrix<T, rowA, colB> C;
     for(size_t i=0; i<rowA; ++i)
     for(size_t j=0; j<colB; ++j)
@@ -82,7 +82,7 @@ Matrix<T, rowA, colB> operator*(const Matrix<T, rowA, n> &A, const Matrix<T, n, 
 }
 
 template <typename T, size_t row, size_t col, typename X>
-Matrix<T, row, col> operator*(const Matrix<T, row, col> &A, const X k){
+constexpr Matrix<T, row, col> operator*(const Matrix<T, row, col> &A, const X k){
     Matrix<T, row, col> B;
     for(size_t i=0; i<row; ++i)
     for(size_t j=0; j<col; ++j)
@@ -93,7 +93,7 @@ Matrix<T, row, col> operator*(const Matrix<T, row, col> &A, const X k){
 }
 
 template <typename X, typename T, size_t row, size_t col>
-Matrix<T, row, col> operator*(const X k, const Matrix<T, row, col> &A){
+constexpr Matrix<T, row, col> operator*(const X k, const Matrix<T, row, col> &A){
     Matrix<T, row, col> B;
     for(size_t i=0; i<row; ++i)
     for(size_t j=0; j<col; ++j)
