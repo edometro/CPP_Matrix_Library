@@ -52,6 +52,16 @@ class Matrix {
         }
     }
 
+    template <typename U>
+    constexpr operator Matrix<U, row, col>() {
+        Matrix<U, row, col> A;
+        for(size_t i=0; i<row; ++i)
+        for(size_t j=0; j<col; ++j){
+            A[i][j] = static_cast<U>(this->data[i][j]);
+        }
+        return A;
+    }
+
     template <int r = row, int c = col, std::enable_if_t<(r == 1) && (c == 1), bool> = true>
     constexpr operator T() {
         return (*this)[0][0];
