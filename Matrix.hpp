@@ -52,7 +52,7 @@ class Matrix {
         }
     }
 
-    template <int r = row, int c = col, std::enable_if_t<(r == 1) && (r == 1), bool> = true>
+    template <int r = row, int c = col, std::enable_if_t<(r == 1) && (c == 1), bool> = true>
     operator T() {
         return (*this)[0][0];
     }
