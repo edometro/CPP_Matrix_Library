@@ -52,6 +52,72 @@ class Matrix {
         }
     }
 
+    constexpr Matrix<T, col, row> transposit() const {
+        Matrix<T, col, row> _T;
+        for(size_t i=0; i<row; ++i)
+        for(size_t j=0; j<col; ++j){
+            _T[j][i] = (*this)[i][j];
+        }
+        return _T;
+    }
+
+    constexpr Matrix<T, col, row> inverse() const {
+        if constexpr (row == col){
+            constexpr size_t n = row;
+            Matrix<T, n, n> A = *this;
+            Matrix<T, n, n> I;
+            for(size_t i=0; i<n; ++i){
+                I[i][i] = 1;
+            }
+
+            for(size_t i=0; i<n; ++i){
+                T max = abs(A[i][i]);
+                for(size_t k=i+1; k<n; ++k){
+                    if(max < abs(A[k][i])){
+                        max = A[k][i];
+                        for(size_t j=0; j<n; ++j){
+                            T a_ij = A[i][j];
+                            A[i][j] = A[k][j];
+                            A[k][j] = a_ij;
+                            T i_ij = I[i][j];
+                            I[i][j] = I[k][j];
+                            I[k][j] = i_ij;
+                        }
+                    }
+                }
+                if(max == 0){
+                    throw std::runtime_error("Matrix is singular and cannot be inverted.");
+                }
+                T m = A[i][i];
+                for(size_t j=0; j<n; ++j){
+                    A[i][j] /= m;
+                    I[i][j] /= m;
+                }
+                for(size_t j=0; j<n; ++j){
+                    if(i != j){
+                        T t = A[j][i];
+                        for(size_t k=0; k<n; ++k){
+                            A[j][k] -= A[i][k]*t;
+                            I[j][k] -= I[i][k]*t;
+                        }
+                    }
+                }
+                
+            }
+            return I;
+        }
+        else{
+            if constexpr (row > col){
+                return ((*this).transposit() * (*this)).inverse() * this->transposit();
+            }
+            else{
+                return this->transposit() * ((*this) * this->transposit()).inverse();
+            }
+        }
+    }
+
+
+
     template <typename U>
     constexpr operator Matrix<U, row, col>() {
         Matrix<U, row, col> A;
