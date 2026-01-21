@@ -27,7 +27,6 @@
 
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
-#include <iostream>
 
 template <typename T, size_t row, size_t col>
 class Matrix {
@@ -42,15 +41,6 @@ class Matrix {
     }
     constexpr T* operator[](const size_t i) { return data[i]; }
     constexpr const T* operator[](const size_t i) const { return data[i]; }
-    void print() const {
-        for(size_t i=0; i<row; ++i){
-            for(size_t j=0; j<col; ++j){
-                std::cout << (*this)[i][j];
-                if(j<row) std::cout << " ";
-            }
-            std::cout << std::endl;
-        }
-    }
 
     constexpr Matrix<T, col, row> transposit() const {
         Matrix<T, col, row> _T;
